@@ -28,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var managedObjectContext: NSManagedObjectContext = self.persistentContainer.viewContext
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        print(applicationDocumentDirectory)
+        print(applicationDocumentsDirectory)
         // Override point for customization after application launch.
         let tabController = window!.rootViewController as! UITabBarController
         if let tabViewController = tabController.viewControllers {
