@@ -196,6 +196,13 @@ class LocationDetailsViewController: UITableViewController {
             return nil
         }
     }
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let selection = UIView(frame: CGRect.zero)
+        selection.backgroundColor = UIColor(white: 1.0, alpha: 0.2)
+        cell.selectedBackgroundView = selection
+    }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 && indexPath.row == 0 {
             descriptionTextView.becomeFirstResponder()
@@ -215,30 +222,15 @@ class LocationDetailsViewController: UITableViewController {
     
     // MARK: - Private Methods
     func string(from placemark: CLPlacemark) -> String {
-        var text = ""
-        if let s = placemark.subThoroughfare {
-            text += s + " "
-        }
-        // street name
-        if let s = placemark.thoroughfare {
-            text += s + ", "
-        }
-        // city
-        if let s = placemark.locality {
-            text += s + ", "
-        }
-        // state or province
-        if let s = placemark.administrativeArea {
-            text += s + " "
-        }
-        if let s = placemark.postalCode {
-            text += s + ", "
-        }
-        if let s = placemark.country {
-            text += s
-        }
+        var line = ""
+        line.add(text: placemark.subThoroughfare)
+        line.add(text: placemark.thoroughfare, separatedBy: " ")
+        line.add(text: placemark.locality, separatedBy: ", ")
+        line.add(text: placemark.administrativeArea, separatedBy: ", ")
+        line.add(text: placemark.postalCode, separatedBy: " ")
+        line.add(text: placemark.country, separatedBy: ", ")
         
-        return text
+        return line
     }
     
     func format(date: Date) -> String {
@@ -259,7 +251,8 @@ class LocationDetailsViewController: UITableViewController {
 
 extension LocationDetailsViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func takePhotoWithCamera() {
-        let imagePicker = UIImagePickerController()
+        let imagePicker = MyImagePickerController()
+        imagePicker.view.tintColor = view.tintColor
         imagePicker.sourceType = .camera
         imagePicker.delegate = self
         imagePicker.allowsEditing = true
